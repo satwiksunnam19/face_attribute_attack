@@ -102,15 +102,22 @@ def train(model, train_loader, test_loader, start_epoch, end_epoch, op_folder, b
     loss_func = nn.BCEWithLogitsLoss()#nn.CrossEntropyLoss()
     best_test_acc = 0
 
+    # Create the output directory if it doesn't exist
+    os.makedirs(op_folder, exist_ok=True)
+
     # Load model and optimizer state dicts if resume flag is true
     if resume_training:
-        ckpt = torch.load(os.path.join(op_folder, 'best_epoch.pt'))
-        # Load model
-        model.load_state_dict(ckpt['model'])
-        optimizer.load_state_dict(ckpt['optimizer'])
-        start_epoch = int(ckpt['epoch']) + 1
-        best_test_acc = ckpt['test_acc']
-        print(f'Checkpoint file loaded. Resuming from epoch :{start_epoch}, where the best accuracy was : {best_test_acc}')
+        ckpt_path = os.path.join(op_folder, 'best_epoch.pt')
+        if os.path.exists(ckpt_path):
+            ckpt = torch.load(ckpt_path)
+            # Load model
+            model.load_state_dict(ckpt['model'])
+            optimizer.load_state_dict(ckpt['optimizer'])
+            start_epoch = int(ckpt['epoch']) + 1
+            best_test_acc = ckpt['test_acc']
+            print(f'Checkpoint file loaded. Resuming from epoch :{start_epoch}, where the best accuracy was : {best_test_acc}')
+        else:
+            print(f'Checkpoint file not found at path: {ckpt_path}. Training from scratch.')
 
     for epoch in tqdm(range(start_epoch, end_epoch)):    
         model.train()        
@@ -142,10 +149,8 @@ def train(model, train_loader, test_loader, start_epoch, end_epoch, op_folder, b
                                 )
 
             print(f'Saving best epoch at epoch {epoch}')
-            save_filename = str(op_folder)+'best_epoch.pt'
+            save_filename = os.path.join(op_folder, 'best_epoch.pt')
             torch.save(train_state, save_filename)
-
-
 
 ### Testing
 def test(model, test_loader, bs):
