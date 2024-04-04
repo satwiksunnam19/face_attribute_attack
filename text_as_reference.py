@@ -230,7 +230,7 @@ def text_as_reference(ip_prompt, wb_model_name, ckpt_path, log_path):
 
         # For every n iteration save the generated image
         if i % 5 == 0:
-            torchvision.utils.save_image(img_gen,  os.path.join(log_path, wb_model_name, 'step_wise_updates', f"{str(i).zfill(5)}.jpg"), normalize=True, range=(0, 1))
+            torchvision.utils.save_image(img_gen,  os.path.join(log_path, wb_model_name, 'step_wise_updates', f"{str(i).zfill(5)}.jpg"), normalize=True)
 
         # Compute final loss and optimze
         loss = (clip_loss_weightage*c_loss)  + (l2_loss_weightage*l2_loss) + (forensic_classifier_loss_weightage*loss_class)
@@ -242,7 +242,7 @@ def text_as_reference(ip_prompt, wb_model_name, ckpt_path, log_path):
         optimizer.step()
 
     # Save the final optimzed image of the current sample
-    torchvision.utils.save_image(img_gen, os.path.join(log_path, wb_model_name, f'final_{prmpt_str}.png'), normalize=True, range=(0,1))
+    torchvision.utils.save_image(img_gen, os.path.join(log_path, wb_model_name, f'final_{prmpt_str}.png'), normalize=True)
 
 
 

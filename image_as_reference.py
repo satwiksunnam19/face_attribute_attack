@@ -207,7 +207,7 @@ def image_as_reference(ref_image_path, wb_model_name, ckpt_path, log_path):
     with torch.no_grad():
         source_img_gen, _ = g_ema([latent_n], input_is_latent=True, noise=noises)
         source_img_gen = ((source_img_gen+1)/2).clamp(0,1)
-        torchvision.utils.save_image(source_img_gen,  os.path.join(log_path, wb_model_name, "source_image.jpg"), normalize=True, range=(0, 1))
+        torchvision.utils.save_image(source_img_gen,  os.path.join(log_path, wb_model_name, "source_image.jpg"), normalize=True)
 
 
     for i in range(optimize_steps):
@@ -234,7 +234,7 @@ def image_as_reference(ref_image_path, wb_model_name, ckpt_path, log_path):
         print(f'[{i+1}/{optimize_steps}] Loss: {loss.item()} Perceptual Loss: {p_loss.item()} L2 Loss: {l2_loss.item()} Forensic Classifier Loss: {loss_class.item()}, WB Prediction: {torch.sigmoid(output).item()}')
 
         if i % 10 == 0:
-            torchvision.utils.save_image(img_gen,  os.path.join(log_path, wb_model_name, 'step_wise_updates', f"{str(i).zfill(5)}.jpg"), normalize=True, range=(0, 1))
+            torchvision.utils.save_image(img_gen,  os.path.join(log_path, wb_model_name, 'step_wise_updates', f"{str(i).zfill(5)}.jpg"), normalize=True)
             
 
         optimizer.zero_grad()
@@ -252,7 +252,7 @@ def image_as_reference(ref_image_path, wb_model_name, ckpt_path, log_path):
 
 
     # Save the final optimzed image of the current sample
-    torchvision.utils.save_image(img_gen, os.path.join(log_path, wb_model_name, f'final_{mod_level}_adv_image.png'), normalize=True, range=(0,1))
+    torchvision.utils.save_image(img_gen, os.path.join(log_path, wb_model_name, f'final_{mod_level}_adv_image.png'), normalize=True)
 
 
 
