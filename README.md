@@ -56,7 +56,7 @@
 
 - **Get code**
 ```shell 
-git clone https://github.com/koushiksrivats/face_attribute_attack.git
+git clone https://github.com/satwiksunnam19/face_attribute_attack.git
 ```
 
 - **Build environment**
