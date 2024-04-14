@@ -295,7 +295,7 @@ def one_vs_many_classifier(start_latents_path, all_wb_model_names, log_path):
 
                 # For every n iteration save the generated image
                 if i % 5 == 0:
-                    torchvision.utils.save_image(img_gen,  os.path.join(log_path, 'one_vs_many', 'step_wise_updates', str(ind), f"{str(i).zfill(5)}.jpg"), normalize=True, range=(0, 1))
+                    torchvision.utils.save_image(img_gen,  os.path.join(log_path, 'one_vs_many', 'step_wise_updates', str(ind), f"{str(i).zfill(5)}.jpg"), normalize=True)
 
                 # Compute final loss and optimze
                 loss = (clip_loss_weightage*c_loss)  + (l2_loss_weightage*l2_loss) + (forensic_classifier_loss_weightage*loss_class)
@@ -305,7 +305,7 @@ def one_vs_many_classifier(start_latents_path, all_wb_model_names, log_path):
                 optimizer.step()
 
             # Save the final optimzed image of the current sample
-            torchvision.utils.save_image(img_gen, os.path.join(log_path, 'one_vs_many', whitebox_classifier_name, f'final_{ind}_{prmpt_str}.png'), normalize=True, range=(0,1))
+            torchvision.utils.save_image(img_gen, os.path.join(log_path, 'one_vs_many', whitebox_classifier_name, f'final_{ind}_{prmpt_str}.png'), normalize=True)
 
             # After the latents have been optimized evaluate the image on other models in the black box setting
             for key in classifier_predictions.keys():
@@ -401,7 +401,7 @@ def ensemble_classifier(start_latents_path, wb_model_combination, all_wb_model_n
 
             # For every n iteration save the generated image
             if i % 5 == 0:
-                torchvision.utils.save_image(img_gen,  os.path.join(log_path, 'ensemble', 'step_wise_updates', str(ind), f"{str(i).zfill(5)}.jpg"), normalize=True, range=(0, 1))
+                torchvision.utils.save_image(img_gen,  os.path.join(log_path, 'ensemble', 'step_wise_updates', str(ind), f"{str(i).zfill(5)}.jpg"), normalize=True)
 
             # Compute final loss and optimize
             loss = (clip_loss_weightage*c_loss)  + (l2_loss_weightage*l2_loss) + (forensic_classifier_loss_weightage*loss_class)
@@ -411,7 +411,7 @@ def ensemble_classifier(start_latents_path, wb_model_combination, all_wb_model_n
             optimizer.step()
 
         # Save the final optimzed image of the current sample
-        torchvision.utils.save_image(img_gen, os.path.join(log_path, 'ensemble', folder_name, f'final_{ind}_{prmpt_str}.png'), normalize=True, range=(0,1))
+        torchvision.utils.save_image(img_gen, os.path.join(log_path, 'ensemble', folder_name, f'final_{ind}_{prmpt_str}.png'), normalize=True)
 
         # After the latents have been optimized evaluate the image on other models in the black box setting
         for key in classifier_predictions.keys():
@@ -496,7 +496,7 @@ def meta_classifier(start_latents_path, wb_model_combination, all_wb_model_names
             
             # Save image every 5 steps
             if i % 5 == 0:
-                torchvision.utils.save_image(img_gen,  os.path.join(log_path, 'meta', 'step_wise_updates', str(ind), f"{str(i).zfill(5)}.jpg"), normalize=True, range=(0, 1))
+                torchvision.utils.save_image(img_gen,  os.path.join(log_path, 'meta', 'step_wise_updates', str(ind), f"{str(i).zfill(5)}.jpg"), normalize=True)
 
             c_loss = clip_loss(img_gen, text_inputs)
             l2_loss = ((latent_dummy - latent) ** 2).sum()
@@ -549,7 +549,7 @@ def meta_classifier(start_latents_path, wb_model_combination, all_wb_model_names
         with torch.no_grad():
             final_img_gen, _ = g_ema([latent], input_is_latent=True, noise = noises)
             final_img_gen = ((final_img_gen+1)/2).clamp(0,1)
-            torchvision.utils.save_image(final_img_gen, os.path.join(log_path, 'meta', folder_name, f'final_{ind}_{prmpt_str}.png'), normalize=True, range=(0,1))
+            torchvision.utils.save_image(final_img_gen, os.path.join(log_path, 'meta', folder_name, f'final_{ind}_{prmpt_str}.png'), normalize=True)
 
         # After the latents have been optimized evaluate the image on other models in the black box setting
         for key in classifier_predictions.keys():
